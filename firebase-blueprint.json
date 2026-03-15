@@ -1,0 +1,46 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profile and usage tracking",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "description": "User email" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "messageCount": { "type": "integer", "description": "Total messages sent" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account creation time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "message": {
+      "title": "Message",
+      "description": "A single chat message",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "model"], "description": "Role of the sender" },
+        "text": { "type": "string", "description": "Content of the message" },
+        "image": {
+          "type": "object",
+          "properties": {
+            "data": { "type": "string", "description": "Base64 encoded image data" },
+            "mimeType": { "type": "string", "description": "MIME type of the image" }
+          },
+          "description": "Optional image attached to the message"
+        },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Time the message was sent" }
+      },
+      "required": ["role", "text", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "users",
+      "description": "User documents"
+    },
+    "/users/{userId}/messages/{messageId}": {
+      "schema": "message",
+      "description": "Chat messages for the user"
+    }
+  }
+}
